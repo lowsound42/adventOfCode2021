@@ -39,7 +39,6 @@ const processOxyCo2 = (data, index, version) => {
 
 const processData = (data) => {
     numOfDigits = data[0].length;
-    // let result1 = processOxy(data, 0);
     let result1 = processOxyCo2(data, 0, 'oxy');
     let result2 = processOxyCo2(data, 0, 'co2');
     console.log(parseInt(result1.join(''), 2) * parseInt(result2.join(''), 2));
