@@ -9,54 +9,39 @@ const checkMostCommonBit = (arrayOfBits) => {
     return sum;
 };
 
-const processOxy = (data) => {
+const processOxyCo2 = (data, index, version) => {
     let oxyArray = data;
-    let j = 0;
-    while (j < numOfDigits) {
-        let tempArray = [];
-        let bitsToCheck = [];
-        for (let i = 0; i < oxyArray.length; i++) {
-            bitsToCheck.push(parseInt(oxyArray[i][j]));
-        }
-        let result = checkMostCommonBit(bitsToCheck);
-        oxyArray.forEach((element) => {
-            if (parseInt(element[j]) === result) {
+    let tempArray = [];
+    let bitsToCheck = [];
+
+    for (let i = 0; i < oxyArray.length; i++) {
+        bitsToCheck.push(parseInt(oxyArray[i][index]));
+    }
+    let result = checkMostCommonBit(bitsToCheck);
+    oxyArray.forEach((element) => {
+        if (version === 'oxy') {
+            if (parseInt(element[index]) === result) {
                 tempArray.push(element);
             }
-        });
-        oxyArray = tempArray;
-        j++;
-    }
-    return oxyArray;
-};
-
-const processCo2 = (data) => {
-    let coArray = data;
-    let j = 0;
-    while (coArray.length >= 2) {
-        let tempArray = [];
-        let bitsToCheck = [];
-        for (let i = 0; i < coArray.length; i++) {
-            bitsToCheck.push(parseInt(coArray[i][j]));
-        }
-
-        let result = checkMostCommonBit(bitsToCheck);
-        coArray.forEach((element, index) => {
-            if (parseInt(element[j]) != result) {
+        } else {
+            if (parseInt(element[index]) != result) {
                 tempArray.push(element);
             }
-        });
-        coArray = tempArray;
-        j++;
+        }
+    });
+    oxyArray = tempArray;
+    if (oxyArray.length > 1) {
+        return processOxyCo2(oxyArray, index + 1, version);
+    } else {
+        return oxyArray;
     }
-
-    return coArray;
 };
 
 const processData = (data) => {
     numOfDigits = data[0].length;
-    let result1 = processOxy(data);
-    let result2 = processCo2(data);
+    // let result1 = processOxy(data, 0);
+    let result1 = processOxyCo2(data, 0, 'oxy');
+    let result2 = processOxyCo2(data, 0, 'co2');
     console.log(parseInt(result1.join(''), 2) * parseInt(result2.join(''), 2));
 };
 
